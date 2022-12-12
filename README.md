@@ -1,2 +1,2 @@
-# elitric-car-app
+# eletric-car-app
 Aplicativo de Carros Elétricos
