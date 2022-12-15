@@ -14,8 +14,7 @@ import br.com.oaleixo.eleticcarapp.ui.adapter.TabsAdapter
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
-    lateinit var btnCalcular: Button
-    lateinit var listaCarros: RecyclerView
+
     lateinit var tabLayout : TabLayout
     lateinit var viewPager : ViewPager2
 
@@ -24,8 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupView()
-        setupListeners()
-        setupList()
         setupTabs()
 
     }
@@ -33,16 +30,10 @@ class MainActivity : AppCompatActivity() {
 
     fun setupView() {
         tabLayout = findViewById(R.id.tab_layout)
-        btnCalcular = findViewById(R.id.btn_calcular)
-        listaCarros = findViewById(R.id.rv_lista_carros)
         viewPager = findViewById(R.id.vp_view_pager)
     }
 
-    fun setupList() {
-        val adpater = CarAdapter(CarFactory.list)
-        //listaCarros.layoutManager = LinearLayoutManager(this)
-        listaCarros.adapter = adpater
-    }
+
 
     fun setupTabs (){
         val tabsAdapter = TabsAdapter(this)
@@ -73,12 +64,5 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun setupListeners() {
-        btnCalcular.setOnClickListener {
-            startActivity(Intent(this, CalcularAutonomiaActivity::class.java))
-
-        }
-
-    }
 
 }
