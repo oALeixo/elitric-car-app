@@ -29,6 +29,8 @@ class CarFragment : Fragment(){
     lateinit var fabCalcular: FloatingActionButton
     lateinit var listaCarros: RecyclerView
 
+    var carrosArray : ArrayList<Carro> =  ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,8 +41,8 @@ class CarFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        callService()
         setupView(view)
-        setupList()
         setupListeners()
 
     }
@@ -53,15 +55,18 @@ class CarFragment : Fragment(){
     }
 
     fun setupList() {
-        val adpater = CarAdapter(CarFactory.list)
+        val adpater = CarAdapter(carrosArray)
         listaCarros.adapter = adpater
     }
     fun setupListeners() {
         fabCalcular.setOnClickListener {
-            MyTask().execute("https://oaleixo.github.io/car-api/cars.json")
-            //startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
-
+            startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
         }
+    }
+
+    fun callService(){
+        val urlBase = "https://oaleixo.github.io/car-api/cars.json"
+        MyTask().execute(urlBase)
     }
 
     inner class MyTask : AsyncTask<String, String, String>(){
@@ -111,8 +116,10 @@ class CarFragment : Fragment(){
                         recarga = recarga,
                         urlPhoto = urlPhoto
                     )
-
+                    carrosArray.add(model)
                 }
+
+                setupList()
             } catch (ex: Exception){
                 Log.e("Erro ->", ex.message.toString())
             }
