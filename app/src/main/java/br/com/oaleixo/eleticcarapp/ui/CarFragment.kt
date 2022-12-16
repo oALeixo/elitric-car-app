@@ -1,7 +1,11 @@
 package br.com.oaleixo.eleticcarapp.ui
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +49,7 @@ class CarFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
         setupView(view)
         setupListeners()
+        checkForInternet(context)
         callService()
 
     }
@@ -74,6 +79,26 @@ class CarFragment : Fragment(){
     fun callService(){
         val urlBase = "https://oaleixo.github.io/car-api/cars.json"
         MyTask().execute(urlBase)
+    }
+
+    fun checkForInternet(context: Context?) : Boolean {
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network)?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 
     inner class MyTask : AsyncTask<String, String, String>(){
