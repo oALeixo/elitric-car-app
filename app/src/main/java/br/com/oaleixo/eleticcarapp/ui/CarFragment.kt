@@ -15,6 +15,7 @@ import br.com.oaleixo.eleticcarapp.ui.adapter.CarAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -56,10 +57,10 @@ class CarFragment : Fragment(){
     }
     fun setupListeners() {
         fabCalcular.setOnClickListener {
-            startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
+            MyTask().execute("https://oaleixo.github.io/car-api/cars.json")
+            //startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
 
         }
-
     }
 
     inner class MyTask : AsyncTask<String, String, String>(){
@@ -69,7 +70,6 @@ class CarFragment : Fragment(){
             Log.d("MyTasck", "Iniciando ...")
         }
         override fun doInBackground(vararg url: String?): String {
-            TODO("Not yet implemented")
             var urlConnection: HttpURLConnection? = null
 
             try {
@@ -79,49 +79,37 @@ class CarFragment : Fragment(){
                 urlConnection.connectTimeout = 60000
                 urlConnection.readTimeout = 60000
 
-                var inString = streamToString(urlConnection.inputStream)
-                publishProgress(inString)
+                var response = urlConnection.inputStream.bufferedReader().use { it.readText() }
+                publishProgress(response)
             } catch (ex: Exception){
                 Log.e("Erro", " Erro ao realizar processamento")
 
             } finally {
                 urlConnection?.disconnect()
             }
-
             return " "
         }
 
         override fun onProgressUpdate(vararg values: String?) {
             try {
-                var json: JSONObject
-                values[0]?.let {
-                    json = JSONObject(it)
+                val jsonArray = JSONTokener(values[0]).nextValue() as JSONArray
+
+                for ( i in 0 until jsonArray.length()){
+                    val id = jsonArray.getJSONObject(i).getString("id")
+                    val preco = jsonArray.getJSONObject(i).getString("preco")
+                    val bateria = jsonArray.getJSONObject(i).getString("bateria")
+                    val potencia = jsonArray.getJSONObject(i).getString("potencia")
+                    val recarga = jsonArray.getJSONObject(i).getString("recarga")
+                    val urlPhoto = jsonArray.getJSONObject(i).getString("urlPhoto")
+
+
+
                 }
-                val
-
-
             } catch (ex: Exception){
 
             }
         }
-
-        fun streamToString(inputStream: InputStream) : String{
-            val bufferReader = BufferedReader(InputStreamReader(inputStream))
-            var line: String
-            var result = ""
-
-            try {
-                do{
-                    line = bufferReader.readLine()
-                    line?.let {
-                        result += line
-                    }
-                }while ( line!= null )
-            }catch (ex: Exception){
-                Log.e("Erro", "Erro ao parcelar Stream")
-            }
-            return result
-        }
-
     }
 }
+
+
