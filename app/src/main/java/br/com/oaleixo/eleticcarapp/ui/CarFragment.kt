@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
@@ -28,6 +29,7 @@ class CarFragment : Fragment(){
 
     lateinit var fabCalcular: FloatingActionButton
     lateinit var listaCarros: RecyclerView
+    lateinit var progress: ProgressBar
 
     var carrosArray : ArrayList<Carro> =  ArrayList()
 
@@ -41,22 +43,27 @@ class CarFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        callService()
         setupView(view)
         setupListeners()
+        callService()
 
     }
     fun setupView(view: View) {
         view?.apply {
             fabCalcular = findViewById(R.id.fab_calcular)
             listaCarros = findViewById(R.id.rv_lista_carros)
+            progress = findViewById(R.id.pb_loader)
         }
 
     }
 
     fun setupList() {
-        val adpater = CarAdapter(carrosArray)
-        listaCarros.adapter = adpater
+        val carroAdpater = CarAdapter(carrosArray)
+        listaCarros.apply {
+            visibility = View.VISIBLE
+            adapter = carroAdpater
+        }
+
     }
     fun setupListeners() {
         fabCalcular.setOnClickListener {
@@ -74,6 +81,7 @@ class CarFragment : Fragment(){
         override fun onPreExecute() {
             super.onPreExecute()
             Log.d("MyTasck", "Iniciando ...")
+            progress.visibility = View.VISIBLE
         }
         override fun doInBackground(vararg url: String?): String {
             var urlConnection: HttpURLConnection? = null
@@ -128,7 +136,7 @@ class CarFragment : Fragment(){
                     )
                     carrosArray.add(model)
                 }
-
+                progress.visibility = View.GONE
                 setupList()
             } catch (ex: Exception){
                 Log.e("Erro ->", ex.message.toString())
