@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
 import br.com.oaleixo.eleticcarapp.data.CarFactory
+import br.com.oaleixo.eleticcarapp.domain.Carro
 import br.com.oaleixo.eleticcarapp.ui.adapter.CarAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
@@ -102,11 +103,18 @@ class CarFragment : Fragment(){
                     val recarga = jsonArray.getJSONObject(i).getString("recarga")
                     val urlPhoto = jsonArray.getJSONObject(i).getString("urlPhoto")
 
-
+                    val model = Carro(
+                        id = id.toInt(),
+                        preco = preco,
+                        bateria = bateria,
+                        potencia = potencia,
+                        recarga = recarga,
+                        urlPhoto = urlPhoto
+                    )
 
                 }
             } catch (ex: Exception){
-
+                Log.e("Erro ->", ex.message.toString())
             }
         }
     }
