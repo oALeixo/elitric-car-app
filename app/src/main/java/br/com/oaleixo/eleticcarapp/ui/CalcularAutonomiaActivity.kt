@@ -1,12 +1,16 @@
 package br.com.oaleixo.eleticcarapp.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.oaleixo.eleticcarapp.R
+import java.net.HttpURLConnection
+import java.net.URL
 
 class CalcularAutonomiaActivity : AppCompatActivity() {
     lateinit var preco: EditText
@@ -43,4 +47,5 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         val result = preco / km
         resultado.text = result.toString()
     }
+
 }

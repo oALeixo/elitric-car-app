@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
 import br.com.oaleixo.eleticcarapp.domain.Carro
 
-class CarAdapter(private val carros: List<Carro>) : RecyclerView.Adapter<CarAdapter.ViewHolder>(){
+class  CarAdapter(private val carros: List<Carro>) : RecyclerView.Adapter<CarAdapter.ViewHolder>(){
     // Cria uma nova view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.carro_item, parent, false)
