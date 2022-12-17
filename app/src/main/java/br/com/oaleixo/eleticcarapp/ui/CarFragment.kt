@@ -1,5 +1,6 @@
 package br.com.oaleixo.eleticcarapp.ui
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -21,6 +22,14 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
 import br.com.oaleixo.eleticcarapp.data.CarFactory
 import br.com.oaleixo.eleticcarapp.data.CarsApi
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_BATERIA
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_POTENCIA
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_PRECO
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_RECARGA
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_URL_PHOTO
+import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.TABLE_NAME
+import br.com.oaleixo.eleticcarapp.data.local.CarsDbHelper
 import br.com.oaleixo.eleticcarapp.domain.Carro
 import br.com.oaleixo.eleticcarapp.ui.adapter.CarAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -234,6 +243,19 @@ class CarFragment : Fragment(){
                 Log.e("Erro ->", ex.message.toString())
             }
         }
+    }
+
+    fun saveOnDatabase(carro: Carro) {
+        val dbHelper = CarsDbHelper(requireContext())
+        val db = dbHelper.writableDatabase
+        val values =  ContentValues().apply {
+            put(COLUMN_NAME_PRECO, carro.preco)
+            put(COLUMN_NAME_BATERIA, carro.bateria)
+            put(COLUMN_NAME_POTENCIA, carro.potencia)
+            put(COLUMN_NAME_RECARGA, carro.recarga)
+            put(COLUMN_NAME_URL_PHOTO, carro.urlPhoto)
+        }
+        val newRegister = db?.insert(TABLE_NAME, null, values)
     }
 }
 
