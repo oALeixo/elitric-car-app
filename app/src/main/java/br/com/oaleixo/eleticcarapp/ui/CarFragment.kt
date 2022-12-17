@@ -128,6 +128,9 @@ class CarFragment : Fragment(){
             isVisible = true
             adapter = carroAdpater
         }
+        carroAdpater.carItemLister = { carro ->
+            val bateria = carro.bateria
+        }
 
     }
     fun setupListeners() {
@@ -217,7 +220,9 @@ class CarFragment : Fragment(){
                         bateria = bateria,
                         potencia = potencia,
                         recarga = recarga,
-                        urlPhoto = urlPhoto
+                        urlPhoto = urlPhoto,
+                        isFavorite = false
+
                     )
                     carrosArray.add(model)
                 }
