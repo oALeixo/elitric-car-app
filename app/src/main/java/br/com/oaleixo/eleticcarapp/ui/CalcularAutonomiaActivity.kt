@@ -25,7 +25,14 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calcular_autonomia)
         setupView()
         setupListeners()
+        setupCachedResult()
     }
+
+    private fun setupCachedResult() {
+        val valorCalculado = getSharedPref()
+        resultado.text = valorCalculado.toString()
+    }
+
     fun setupView() {
         preco = findViewById(R.id.Edtxt_Preco_kwh)
         kmPercorrido = findViewById(R.id.Edtxt_KmPrecorido)
@@ -57,6 +64,11 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
             apply()
 
         }
+    }
+
+    fun getSharedPref(): Float{
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getFloat(getString(R.string.saved_calc), 0.0f)
     }
 
 }
