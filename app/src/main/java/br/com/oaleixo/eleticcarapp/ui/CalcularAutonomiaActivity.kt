@@ -1,5 +1,6 @@
 package br.com.oaleixo.eleticcarapp.ui
 
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -46,6 +47,16 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         val km = kmPercorrido.text.toString().toFloat()
         val result = preco / km
         resultado.text = result.toString()
+        saveSharePref(result)
+    }
+
+    fun saveSharePref(resultado : Float) {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putFloat(getString(R.string.saved_calc), resultado )
+            apply()
+
+        }
     }
 
 }
