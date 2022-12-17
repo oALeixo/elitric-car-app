@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
 import br.com.oaleixo.eleticcarapp.data.CarFactory
 import br.com.oaleixo.eleticcarapp.data.CarsApi
+import br.com.oaleixo.eleticcarapp.data.local.CarRepository
 import br.com.oaleixo.eleticcarapp.data.local.CarrosContract
 import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_BATERIA
 import br.com.oaleixo.eleticcarapp.data.local.CarrosContract.CarEntry.COLUMN_NAME_POTENCIA
@@ -138,7 +139,7 @@ class CarFragment : Fragment(){
             adapter = carroAdpater
         }
         carroAdpater.carItemLister = { carro ->
-            val bateria = carro.bateria
+            val isSaved = CarRepository(requireContext()).save(carro)
         }
 
     }
@@ -245,18 +246,6 @@ class CarFragment : Fragment(){
         }
     }
 
-    fun saveOnDatabase(carro: Carro) {
-        val dbHelper = CarsDbHelper(requireContext())
-        val db = dbHelper.writableDatabase
-        val values =  ContentValues().apply {
-            put(COLUMN_NAME_PRECO, carro.preco)
-            put(COLUMN_NAME_BATERIA, carro.bateria)
-            put(COLUMN_NAME_POTENCIA, carro.potencia)
-            put(COLUMN_NAME_RECARGA, carro.recarga)
-            put(COLUMN_NAME_URL_PHOTO, carro.urlPhoto)
-        }
-        val newRegister = db?.insert(TABLE_NAME, null, values)
-    }
 }
 
 
