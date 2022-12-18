@@ -139,10 +139,10 @@ class CarFragment : Fragment(){
             adapter = carroAdpater
         }
         carroAdpater.carItemLister = { carro ->
-            val isSaved = CarRepository(requireContext()).findCarById(carro.id)
+            val isSaved = CarRepository(requireContext()).saveIfNotExist(carro)
         }
-
     }
+
     fun setupListeners() {
         fabCalcular.setOnClickListener {
             startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
