@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.oaleixo.eleticcarapp.R
 import br.com.oaleixo.eleticcarapp.domain.Carro
 
-class  CarAdapter(private val carros: List<Carro>) : RecyclerView.Adapter<CarAdapter.ViewHolder>(){
+class  CarAdapter(private val carros: List<Carro>, private val isFavoriteScreen : Boolean = false) :
+    RecyclerView.Adapter<CarAdapter.ViewHolder>(){
 
     var carItemLister: (Carro) -> Unit = {}
 
@@ -24,6 +25,9 @@ class  CarAdapter(private val carros: List<Carro>) : RecyclerView.Adapter<CarAda
         holder.bateria.text = carros[position].bateria
         holder.potencia.text = carros[position].potencia
         holder.recarga.text = carros[position].recarga
+        if (isFavoriteScreen){
+            holder.favorite.setImageResource(R.drawable.ic_star_selected)
+        }
         holder.favorite.setOnClickListener {
             val carro = carros[position]
             carItemLister(carro)
@@ -35,12 +39,14 @@ class  CarAdapter(private val carros: List<Carro>) : RecyclerView.Adapter<CarAda
         carro: Carro,
         holder: ViewHolder
     ) {
-        carro.isFavorite = !carro.isFavorite
 
-        if (carro.isFavorite)
-            holder.favorite.setImageResource(R.drawable.ic_star_selected)
-        else
-            holder.favorite.setImageResource(R.drawable.ic_star)
+            carro.isFavorite = !carro.isFavorite
+
+            if (carro.isFavorite)
+                holder.favorite.setImageResource(R.drawable.ic_star_selected)
+            else
+                holder.favorite.setImageResource(R.drawable.ic_star)
+
     }
 
     // Pega a quantidade de carros da lista

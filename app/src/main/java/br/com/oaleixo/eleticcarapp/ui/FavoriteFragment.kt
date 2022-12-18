@@ -41,7 +41,7 @@ class FavoriteFragment : Fragment(){
 
     fun setupList() {
         val cars = getCarsOnLocalDb()
-        val carroAdpater = CarAdapter(cars)
+        val carroAdpater = CarAdapter(cars, isFavoriteScreen = true)
         listaCarrosFavoritos.apply {
             isVisible = true
             adapter = carroAdpater
